@@ -50,9 +50,30 @@ struct Weather {
     static func forecast(withLocation location: String, completion: @escaping ([Weather]) -> ()) {
         let url = basePath + location
         
-        let request = URLRequest(url: URL(string: url))
+        let request = URLRequest(url: URL(string: url)!)
         
         let task = URLSession.shared.dataTask(with: request) { (data: Data?, response:URLResponse?, error : Error?) in
+            
+            var forecastArray : [Weather] = []
+            
+            if let data = data {
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String:Any] {
+                        if let dailyForecast = json["daily"] as? [String:Any]{
+                            if let dailyData = dailyForecast["data"] as? [[String:Any]]{
+                                for dataPoint in dailyData {
+                                    if let weatherObject = try? Weather(json: dataPoint){
+                                        forecastArray.append(weatherObject)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch {
+                    print(error.localizedDescription)
+                }
+            }
             
         }
         task.resume()
