@@ -19,7 +19,15 @@ struct Weather {
     let icon : String
     let temprature : Double
     
-    init(json:[String:Any]) {
+    // for serialization error protocol
+    // if while reading we get any error
+    
+    enum SerializationError : Error {
+        
+        
+    }
+    
+    init(json:[String:Any]) throws  {
         
     }
     
