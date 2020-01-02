@@ -23,12 +23,25 @@ struct Weather {
     // if while reading we get any error
     
     enum SerializationError : Error {
-        
+        case missing(String)
+        case invalid(String, Any)
         
     }
     
     init(json:[String:Any]) throws  {
-        
+        // for first json objec we are reading from the json
+        guard let summary = json["summary"] as? String else { throw SerializationError.missing("Summary is not available")}
+        // for icon field
+        guard let icon = json["icon"] as? String else { throw SerializationError.missing("icon is missing")}
+        // for temprature
+        guard let temprature = json["temperatureMax"] as? Double else {throw SerializationError.missing("Temp is missing")}
+            
+        // initalize the objects
+        // important to do this 
+        self.summary = summary
+        self.icon = icon
+        self.temprature = temprature
+        }
     }
     
     
