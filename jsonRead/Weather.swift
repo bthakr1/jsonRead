@@ -48,6 +48,7 @@ struct Weather {
     static let basePath = "https://api.darksky.net/forecast/d8ded2e5186e84d14466e2d34dff08c7/"
     
     static func forecast(withLocation location: String, completion: @escaping ([Weather]) -> ()) {
+        
         let url = basePath + location
         
         let request = URLRequest(url: URL(string: url)!)
@@ -74,6 +75,7 @@ struct Weather {
                     print(error.localizedDescription)
                 }
             }
+            completion(forecastArray)
             
         }
         task.resume()
